@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html lang="br">
 <head>
-  <div style="position:fixed; height:100%; width:100%; background-color: white;top:0;left:0; z-index:222; opacity: 0.5;" id="preload">
-    <img style="position: absolute;margin: auto;top: 0;left: 0;right: 0;bottom: 0; height:30%;" src="img/logo - if.gif" />
+  <div style="position:fixed; height:100%; width:100%; background-color: white;top:0;left:0; z-index:222;" id="preload">
+    <img style="position: absolute;margin: auto;top: 0;left: 0;right: 0;bottom: 0; height:30%;" src="img/logo - if.gif" /><br>
     </div>
+    <style>
+    #preload {
+    opacity: 1;
+    -webkit-transition: opacity 1000ms linear;
+    transition: opacity 1000ms linear;
+}
+    </style>
     <script>
-        function r(f){/in/.test(document.readyState)?setTimeout('r('+f+')',9):f()}
-          r(function(){
-             var elem = document.getElementById("preload");
-             elem.parentNode.removeChild(elem);
-        });
+    var elem = document.getElementById("preload");
+        window.onload = function(){
+          setTimeout(function(){
+            
+            
+
+            elem.style.opacity = '0';
+            setTimeout(function(){elem.parentNode.removeChild(elem);}, 1000);
+            
+            
+             }, 1000); 
+        }
       </script>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -329,7 +343,7 @@
   <!-- Footer -->
   <footer class="bg-light py-5">
     <div class="container">
-      <div class="small text-center text-muted">Copyright &copy; 2020 - Pedroaf0</div>
+      <div onload="load_()" class="small text-center text-muted">Copyright &copy; 2020 - Pedroaf0</div>
     </div>
   </footer>
 
