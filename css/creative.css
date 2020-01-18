@@ -68,7 +68,7 @@ body {
   text-align: left;
   background-color: #fff;
 }
-.fa-whatsapp, .fa-instagram, .fa-facebook-square, .fa-facebook-messenger, .fa-github {
+.fa-whatsapp, .fa-instagram, .fa-facebook-square,  .fa-github, .fa-youtube {
   color: #83757D;
 }
 .fa-whatsapp:hover{
@@ -79,6 +79,12 @@ color: #02bd02;
 }
 .fa-facebook-square:hover , .fa-facebook-messenger:hover{
   color: #4267B2;
+}
+.fa-youtube:hover{
+  color: red;
+}
+.fa-github:hover{
+  color: black;
 }
 
 p {
