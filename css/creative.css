@@ -68,6 +68,18 @@ body {
   text-align: left;
   background-color: #fff;
 }
+.fa-whatsapp, .fa-instagram, .fa-facebook-square, .fa-facebook-messenger, .fa-github {
+  color: #83757D;
+}
+.fa-whatsapp:hover{
+color: #02bd02;
+}
+.fa-instagram:hover{
+  color: #ff0062;
+}
+.fa-facebook-square:hover , .fa-facebook-messenger:hover{
+  color: #4267B2;
+}
 
 p {
   color: black;
