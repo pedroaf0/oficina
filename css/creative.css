@@ -67,8 +67,13 @@ body {
   color: #212529;
   text-align: left;
   background-color: #fff;
+
 }
-.fa-whatsapp, .fa-instagram, .fa-facebook-square,  .fa-github, .fa-youtube {
+
+a{
+  font-family: Arial, Helvetica, sans-serif;
+}
+.fa-whatsapp, .fa-instagram, .fa-facebook-square, .fa-github, .fa-youtube {
   color: #83757D;
 }
 .fa-whatsapp:hover{
