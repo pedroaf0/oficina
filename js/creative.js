@@ -57,7 +57,7 @@
         }
     }
   });
-  $('#services').magnificPopup({
+  $('#google').magnificPopup({
     delegate: 'a',
     type: 'iframe',
     iframe: {
