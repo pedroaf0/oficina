@@ -68,10 +68,7 @@
     }    
   });
 
-  function a(){
-    console.log("aaaaa");
-  }
-  $('.appsMaterialWizButtonPaperbuttonContent exportButtonContent').click(a);
+
 
 })(jQuery); // End of use strict
 
