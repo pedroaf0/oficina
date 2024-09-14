@@ -165,12 +165,10 @@
 
   function renderTimes() {
     const timeContainer = document.getElementById('time-container');
-    const selectedTimeText = document.getElementById('selected-time');
     const selectedDayData = days[selectedDay];
     const sendButton = document.getElementById('send-button');
 
     timeContainer.innerHTML = '';
-    selectedTimeText.textContent = '';
 
     if (selectedDayData && selectedDayData.times.length > 0) {
       selectedDayData.times.forEach((time, index) => {
@@ -188,7 +186,6 @@
           selectedTime = time;
           timeLabel.classList.add('selected');
           const dateText = `${days[selectedDay].week}, ${days[selectedDay].name} de setembro de 2024 -- ${selectedTime}`;
-          document.getElementById('selected-time').textContent = dateText;
 
           // Mostrar o botão de enviar
           document.getElementById('send-button').classList.add('show');
