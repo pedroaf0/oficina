@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Selecionar Dia e Horário</title>
   <style>
+  body{
+        font-family: 'Roboto', sans-serif;
+
+  }
     .container {
       width: 100%;
       margin: 20px;
@@ -80,14 +84,34 @@
       border-radius: 6px;
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     }
-    .time-confirmed {
-      margin-top: 12px;
-      font-weight: bold;
-      color: #444;
-      font-size: 16px;
-    }
     input[type="radio"] {
       display: none;
+    }
+
+    /* Estilo do overlay */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 0.5s;
+      z-index: 1000;
+    }
+    .overlay.show {
+      visibility: visible;
+      opacity: 1;
+    }
+    .overlay-text {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
     }
   </style>
 </head>
@@ -112,6 +136,12 @@
     <button class="botui-actions-buttons-button send-date-time" id="send-button" aria-label="Enviar horário">Enviar</button>
   </div>
 </section>
+
+<!-- Overlay -->
+<div class="overlay" id="confirmation-overlay">
+  <div class="overlay-text">Dia e horário selecionados, continue no chat...</div>
+
+</div>
 
 <script>
   const days = [
@@ -165,13 +195,12 @@
 
   function renderTimes() {
     const timeContainer = document.getElementById('time-container');
-    const selectedDayData = days[selectedDay];
     const sendButton = document.getElementById('send-button');
 
     timeContainer.innerHTML = '';
 
-    if (selectedDayData && selectedDayData.times.length > 0) {
-      selectedDayData.times.forEach((time, index) => {
+    if (selectedDay !== null && days[selectedDay].times.length > 0) {
+      days[selectedDay].times.forEach((time, index) => {
         const timeLabel = document.createElement('label');
         timeLabel.className = 'day-box';
         timeLabel.innerHTML = `
@@ -185,7 +214,6 @@
           // Marcar o horário selecionado
           selectedTime = time;
           timeLabel.classList.add('selected');
-          const dateText = `${days[selectedDay].week}, ${days[selectedDay].name} de setembro de 2024 -- ${selectedTime}`;
 
           // Mostrar o botão de enviar
           document.getElementById('send-button').classList.add('show');
@@ -209,34 +237,19 @@
     }
   }
 
-  function resetSelection() {
-    // Limpa a seleção de horários e oculta o botão de enviar
-    selectedTime = null;
-    document.getElementById('send-button').classList.remove('show');
-  }
-
-  function handleDaySelection() {
-    // Limpa a seleção e oculta o botão de enviar
-    resetSelection();
-  }
-
   function setupEventListeners() {
-    const dayLabels = document.querySelectorAll('.box');
-    dayLabels.forEach((label) => {
-      label.addEventListener('click', () => {
-        handleDaySelection();
-      });
-    });
-
     const sendButton = document.getElementById('send-button');
-    sendButton.addEventListener('click', () => {
-      console.log("botão")
-      if (selectedDay !== null && selectedTime !== null) {
-       window.parent.postMessage(
-  { name: 'data', data: `{ "day": "${days[selectedDay].name}", "time": "${selectedTime}" }` },
-  '*'
-);
+    const overlay = document.getElementById('confirmation-overlay');
 
+    sendButton.addEventListener('click', () => {
+      if (selectedDay !== null && selectedTime !== null) {
+        // Mostrar o overlay
+        overlay.classList.add('show');
+        
+        window.parent.postMessage(
+          { name: 'data', data: `{ "day": "${days[selectedDay].name}", "time": "${selectedTime}" }` },
+          '*'
+        );
       }
     });
   }
