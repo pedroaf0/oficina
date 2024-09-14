@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selecionar Dia e Horário</title>
+  <style>
+    .container {
+      width: 100%;
+      margin: 20px;
+      font-family: 'Roboto', sans-serif;
+    }
+    #day-container {
+      display: flex;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 10px;
+      position: relative;
+    }
+    .select-services.day {
+      display: flex;
+      gap: 10px;
+    }
+    .box {
+      padding: 15px;
+      border: 1px solid #e0e0e0;
+      background-color: #ffffff;
+      border-radius: 12px;
+      text-align: center;
+      min-width: 80px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
+    }
+    .box.selected {
+      background-color: #0288d1;
+      color: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+    .box.disable-item {
+      opacity: 0.4;
+      text-decoration: line-through;
+      color: #9e9e9e;
+      cursor: not-allowed;
+    }
+    button {
+      background-color: #0288d1;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      margin-top: 10px;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    button.show {
+      opacity: 1;
+    }
+    button:hover {
+      background-color: #0277bd;
+    }
+    .day-box {
+      padding: 12px 20px;
+      background-color: #f5f5f5;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+      display: inline-block;
+      margin: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, box-shadow 0.3s, opacity 0.5s;
+      opacity: 0;
+    }
+    .day-box.show {
+      opacity: 1;
+    }
+    .day-box.selected {
+      background-color: #0288d1;
+      color: white;
+      border-radius: 6px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+    .time-confirmed {
+      margin-top: 12px;
+      font-weight: bold;
+      color: #444;
+      font-size: 16px;
+    }
+    input[type="radio"] {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<section class="container position-time">
+  <div class="config-title">
+    <h4>Escolha o dia:</h4>
+  </div>
+
+  <div class="row">
+    <div class="col-12 select-services day" id="day-container" aria-labelledby="day-label">
+      <!-- Dias inseridos dinamicamente -->
+    </div>
+  </div>
+
+  <div class="row">
+    <h5 class="text-center">Escolha o Horário:</h5>
+    <div class="col-12 day-select" id="time-container" aria-labelledby="time-label">
+      <!-- Horários inseridos dinamicamente -->
+    </div>
+    <p class="text-center time-confirmed" id="selected-time"></p>
+    <button class="botui-actions-buttons-button send-date-time" id="send-button" aria-label="Enviar horário">Enviar</button>
+  </div>
+</section>
+
+<script>
+  const days = [
+    { week: 'SAB', name: 'HOJE', enabled: true, times: ['14:00', '15:55'] },
+    { week: 'DOM', name: '15', enabled: false, times: [] },
+    { week: 'SEG', name: '16', enabled: false, times: [] },
+    { week: 'TER', name: '17', enabled: true, times: ['10:00', '12:30', '16:00'] },
+    { week: 'QUA', name: '18', enabled: true, times: ['09:00', '14:00'] },
+    { week: 'QUI', name: '19', enabled: true, times: ['11:00', '17:00'] },
+    { week: 'SEX', name: '20', enabled: true, times: ['13:00', '15:30'] },
+    { week: 'SAB', name: '21', enabled: true, times: ['08:00', '10:45', '18:00'] }
+  ];
+
+  let selectedDay = null;
+  let selectedTime = null;
+
+  function renderDays() {
+    const container = document.getElementById('day-container');
+    container.innerHTML = '';
+
+    days.forEach((day, index) => {
+      const label = document.createElement('label');
+      label.className = 'box';
+      if (!day.enabled) {
+        label.classList.add('disable-item');
+      }
+
+      label.innerHTML = `
+        <input type="radio" name="radio2" ${!day.enabled ? 'disabled' : ''} data-index="${index}">
+        <div>
+          <p class="week">${day.week}</p>
+          <p class="name">${day.name}</p>
+        </div>
+      `;
+
+      label.addEventListener('click', () => {
+        if (day.enabled) {
+          // Desmarcar todos os dias
+          document.querySelectorAll('.box').forEach(box => box.classList.remove('selected'));
+
+          // Marcar o dia selecionado
+          selectedDay = index;
+          label.classList.add('selected');
+          renderTimes();
+        }
+      });
+
+      container.appendChild(label);
+    });
+  }
+
+  function renderTimes() {
+    const timeContainer = document.getElementById('time-container');
+    const selectedTimeText = document.getElementById('selected-time');
+    const selectedDayData = days[selectedDay];
+    const sendButton = document.getElementById('send-button');
+
+    timeContainer.innerHTML = '';
+    selectedTimeText.textContent = '';
+
+    if (selectedDayData && selectedDayData.times.length > 0) {
+      selectedDayData.times.forEach((time, index) => {
+        const timeLabel = document.createElement('label');
+        timeLabel.className = 'day-box';
+        timeLabel.innerHTML = `
+          <input type="radio" name="radio1">
+          <div><p class="name">${time}</p></div>
+        `;
+        timeLabel.addEventListener('click', () => {
+          // Desmarcar todos os horários
+          document.querySelectorAll('.day-box').forEach(box => box.classList.remove('selected'));
+
+          // Marcar o horário selecionado
+          selectedTime = time;
+          timeLabel.classList.add('selected');
+          const dateText = `${days[selectedDay].week}, ${days[selectedDay].name} de setembro de 2024 -- ${selectedTime}`;
+          document.getElementById('selected-time').textContent = dateText;
+
+          // Mostrar o botão de enviar
+          document.getElementById('send-button').classList.add('show');
+        });
+
+        timeContainer.appendChild(timeLabel);
+
+        // Adiciona o efeito de fade após adicionar o horário
+        setTimeout(() => {
+          timeLabel.classList.add('show');
+        }, 10);
+      });
+
+      // Ajusta o botão de enviar
+      setTimeout(() => {
+        document.getElementById('send-button').classList.remove('show');
+      }, 500); // Atraso para garantir que o fade dos horários aconteça primeiro
+    } else {
+      // Oculta o botão de enviar se não houver horários
+      document.getElementById('send-button').classList.remove('show');
+    }
+  }
+
+  function resetSelection() {
+    // Limpa a seleção de horários e oculta o botão de enviar
+    selectedTime = null;
+    document.getElementById('send-button').classList.remove('show');
+    document.getElementById('selected-time').textContent = '';
+  }
+
+  function handleDaySelection() {
+    // Limpa a seleção e oculta o botão de enviar
+    resetSelection();
+  }
+
+  function setupEventListeners() {
+    const dayLabels = document.querySelectorAll('.box');
+    dayLabels.forEach((label) => {
+      label.addEventListener('click', () => {
+        handleDaySelection();
+      });
+    });
+
+    const sendButton = document.getElementById('send-button');
+    sendButton.addEventListener('click', () => {
+      if (selectedDay !== null && selectedTime !== null) {
+        window.parent.postMessage(
+          { name: 'My event', data: { day: days[selectedDay].name, time: selectedTime } },
+          '*'
+        );
+      }
+    });
+  }
+
+  renderDays();
+  setupEventListeners();
+</script>
+
+</body>
+</html>
