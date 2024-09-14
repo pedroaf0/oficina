@@ -235,11 +235,13 @@
 
     const sendButton = document.getElementById('send-button');
     sendButton.addEventListener('click', () => {
+      console.log("botão")
       if (selectedDay !== null && selectedTime !== null) {
-        window.parent.postMessage(
-          { name: 'data', data: `{ day: ${days[selectedDay].name}, time: ${selectedTime} } `},
-          '*'
-        );
+       window.parent.postMessage(
+  { name: 'data', data: `{ "day": "${days[selectedDay].name}", "time": "${selectedTime}" }` },
+  '*'
+);
+
       }
     });
   }
