@@ -109,7 +109,6 @@
     <div class="col-12 day-select" id="time-container" aria-labelledby="time-label">
       <!-- Horários inseridos dinamicamente -->
     </div>
-    <p class="text-center time-confirmed" id="selected-time"></p>
     <button class="botui-actions-buttons-button send-date-time" id="send-button" aria-label="Enviar horário">Enviar</button>
   </div>
 </section>
@@ -217,7 +216,6 @@
     // Limpa a seleção de horários e oculta o botão de enviar
     selectedTime = null;
     document.getElementById('send-button').classList.remove('show');
-    document.getElementById('selected-time').textContent = '';
   }
 
   function handleDaySelection() {
