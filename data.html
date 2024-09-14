@@ -237,7 +237,7 @@
     sendButton.addEventListener('click', () => {
       if (selectedDay !== null && selectedTime !== null) {
         window.parent.postMessage(
-          { name: 'My event', data: { day: days[selectedDay].name, time: selectedTime } },
+          { name: 'data', data: `{ day: ${days[selectedDay].name}, time: ${selectedTime} } `,
           '*'
         );
       }
