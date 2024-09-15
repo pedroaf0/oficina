@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Selecionar Dia e Horário</title>
   <style>
-  body{
-        font-family: 'Roboto', sans-serif;
-
-  }
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
     .container {
       width: 100%;
       margin: 20px;
@@ -87,8 +86,6 @@
     input[type="radio"] {
       display: none;
     }
-
-    /* Estilo do overlay */
     .overlay {
       position: fixed;
       top: 0;
@@ -144,19 +141,19 @@
 </div>
 
 <script>
-  const days = [
-    { week: 'SAB', name: 'HOJE', enabled: true, times: ['14:00', '15:55'] },
-    { week: 'DOM', name: '15', enabled: false, times: [] },
-    { week: 'SEG', name: '16', enabled: false, times: [] },
-    { week: 'TER', name: '17', enabled: true, times: ['10:00', '12:30', '16:00'] },
-    { week: 'QUA', name: '18', enabled: true, times: ['09:00', '14:00'] },
-    { week: 'QUI', name: '19', enabled: true, times: ['11:00', '17:00'] },
-    { week: 'SEX', name: '20', enabled: true, times: ['13:00', '15:30'] },
-    { week: 'SAB', name: '21', enabled: true, times: ['08:00', '10:45', '18:00'] }
-  ];
-
+  let days = [];
   let selectedDay = null;
   let selectedTime = null;
+
+  async function fetchDays() {
+    try {
+      const response = await fetch('https://oxigenioufpel.com.br/API2/backup/index.php');
+      days = await response.json();
+      renderDays();
+    } catch (error) {
+      console.error('Erro ao buscar dados da API:', error);
+    }
+  }
 
   function renderDays() {
     const container = document.getElementById('day-container');
@@ -216,7 +213,7 @@
           timeLabel.classList.add('selected');
 
           // Mostrar o botão de enviar
-          document.getElementById('send-button').classList.add('show');
+          sendButton.classList.add('show');
         });
 
         timeContainer.appendChild(timeLabel);
@@ -229,11 +226,11 @@
 
       // Ajusta o botão de enviar
       setTimeout(() => {
-        document.getElementById('send-button').classList.remove('show');
+        sendButton.classList.remove('show');
       }, 500); // Atraso para garantir que o fade dos horários aconteça primeiro
     } else {
       // Oculta o botão de enviar se não houver horários
-      document.getElementById('send-button').classList.remove('show');
+      sendButton.classList.remove('show');
     }
   }
 
@@ -254,7 +251,8 @@
     });
   }
 
-  renderDays();
+  // Inicia o processo de busca e renderização dos dias e horários
+  fetchDays();
   setupEventListeners();
 </script>
 
