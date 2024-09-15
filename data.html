@@ -238,18 +238,22 @@
     const sendButton = document.getElementById('send-button');
     const overlay = document.getElementById('confirmation-overlay');
 
-    sendButton.addEventListener('click', () => {
-      if (selectedDay !== null && selectedTime !== null) {
-        // Mostrar o overlay
-        overlay.classList.add('show');
-        
-        window.parent.postMessage(
-          { name: 'data', data: `{ "day": "${days[selectedDay].name}", "time": "${selectedTime}" }` },
-          '*'
-        );
-      }
-    });
+sendButton.addEventListener('click', () => {
+  if (selectedDay !== null && selectedTime !== null) {
+    // Usar o campo 'day' para a data no formato correto
+    const selectedDate = days[selectedDay].day; // Usar 'day' no formato "dd-mm-yyyy"
+    
+    // Mostrar o overlay
+    overlay.classList.add('show');
+    
+    // Enviar a mensagem no formato correto
+    window.parent.postMessage(
+      { name: 'data', data: `{ "data": "${selectedDate}", "hora": "${selectedTime}" }` },
+      '*'
+    );
   }
+});
+
 
   // Inicia o processo de busca e renderização dos dias e horários
   fetchDays();
