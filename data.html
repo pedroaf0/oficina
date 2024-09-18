@@ -51,11 +51,12 @@
       background-color: #0288d1;
       color: white;
       border: none;
-      padding: 8px 16px;
+      padding: 12px 16px;
       border-radius: 8px;
       margin-top: 10px;
       opacity: 0;
       transition: opacity 0.5s;
+      width: 100%; /* Define o botão para ocupar 100% da largura */
     }
     button.show {
       opacity: 1;
@@ -137,7 +138,6 @@
 <!-- Overlay -->
 <div class="overlay" id="confirmation-overlay">
   <div class="overlay-text">Dia e horário selecionados, continue no chat...</div>
-
 </div>
 
 <script>
@@ -214,6 +214,9 @@
 
           // Mostrar o botão de enviar
           sendButton.classList.add('show');
+
+          // Rolar suavemente até o botão de envio
+          sendButton.scrollIntoView({ behavior: 'smooth' });
         });
 
         timeContainer.appendChild(timeLabel);
@@ -238,23 +241,21 @@
     const sendButton = document.getElementById('send-button');
     const overlay = document.getElementById('confirmation-overlay');
 
-sendButton.addEventListener('click', () => {
-  if (selectedDay !== null && selectedTime !== null) {
-    // Usar o campo 'day' para a data no formato correto
-    const selectedDate = days[selectedDay].day; // Usar 'day' no formato "dd-mm-yyyy"
-    
-    // Mostrar o overlay
-    overlay.classList.add('show');
-    
-    // Enviar a mensagem no formato correto
-    window.parent.postMessage(
-      { name: 'data', data: `{ "data": "${selectedDate}", "hora": "${selectedTime}" }` },
-      '*'
-    );
+    sendButton.addEventListener('click', () => {
+      if (selectedDay !== null && selectedTime !== null) {
+        const selectedDate = days[selectedDay].day; // Usar 'day' no formato "dd-mm-yyyy"
+        
+        // Mostrar o overlay
+        overlay.classList.add('show');
+        
+        // Enviar a mensagem no formato correto
+        window.parent.postMessage(
+          { name: 'data', data: `{ "data": "${selectedDate}", "hora": "${selectedTime}" }` },
+          '*'
+        );
+      }
+    });
   }
-});
-  }
-
 
   // Inicia o processo de busca e renderização dos dias e horários
   fetchDays();
